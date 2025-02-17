@@ -24,7 +24,7 @@ setlocal formatoptions-=t formatoptions+=croql
 setlocal suffixesadd=.zig,.zir
 
 if has('comments')
-    setlocal comments=:///,://!,://,:\\\\
+    setlocal comments=:///,://!,://
     setlocal commentstring=//\ %s
 endif
 
@@ -49,6 +49,13 @@ endif
 
 let b:undo_ftplugin =
     \ 'setl isk< et< ts< sts< sw< fo< sua< mp< com< cms< inex< inc< pa<'
+
+augroup vim-zig
+    autocmd! * <buffer>
+    autocmd BufWritePre <buffer> if get(g:, 'zig_fmt_autosave', 1) | call zig#fmt#Format() | endif
+augroup END
+
+let b:undo_ftplugin .= '|au! vim-zig * <buffer>'
 
 let &cpo = s:cpo_orig
 unlet s:cpo_orig
